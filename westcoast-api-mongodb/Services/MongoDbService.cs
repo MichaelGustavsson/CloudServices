@@ -4,26 +4,26 @@ using MongoDB.Driver;
 using westcoast_api_mongodb.Models;
 namespace westcoast_api_mongodb.Services
 {
-  public class MongoDbService
-  {
-    private readonly IMongoCollection<Vehicle> _vehicleListCollection;
-
-    public MongoDbService(IOptions<MongoDbSettings> settings)
+    public class MongoDbService
     {
-      MongoClient client = new MongoClient(settings.Value.ConnectionUri);
-      IMongoDatabase database = client.GetDatabase(settings.Value.DatabaseName);
+        private readonly IMongoCollection<Vehicle> _vehicleListCollection;
 
-      _vehicleListCollection = database.GetCollection<Vehicle>(settings.Value.CollectionName);
-    }
+        public MongoDbService(IOptions<MongoDbSettings> settings)
+        {
+            MongoClient client = new MongoClient(settings.Value.ConnectionUri);
+            IMongoDatabase database = client.GetDatabase(settings.Value.DatabaseName);
 
-    public async Task<List<Vehicle>> GetVehiclesAsync()
-    {
-      return await _vehicleListCollection.Find(new BsonDocument()).ToListAsync();
-    }
+            _vehicleListCollection = database.GetCollection<Vehicle>(settings.Value.CollectionName);
+        }
 
-    public async Task CreateVehicleAsync(Vehicle vehicle)
-    {
-      await _vehicleListCollection.InsertOneAsync(vehicle);
+        public async Task<List<Vehicle>> GetVehiclesAsync()
+        {
+            return await _vehicleListCollection.Find(new BsonDocument()).ToListAsync();
+        }
+
+        public async Task CreateVehicleAsync(Vehicle vehicle)
+        {
+            await _vehicleListCollection.InsertOneAsync(vehicle);
+        }
     }
-  }
 }
